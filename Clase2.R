@@ -31,7 +31,7 @@ gral2015 <-  get_election_data(district = 'arg',
                                year = 2015,
                                level = "departamento")
 base <- gral2015 %>%
-  get_names() #prueba
+  get_names() #prueba #prueba 2
 
 unique(base$nombre_lista)
 
@@ -47,5 +47,5 @@ base %>%
 
 
 library(usethis)
-use_git_config(user.name = "luisemiliotisocco", user.email = "jane@example.org")
+use_git_config(user.name = "luisemiliotisocco", user.email = "luisemiliotisocco@gmail.com")
 
