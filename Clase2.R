@@ -1,3 +1,5 @@
+#prueba
+
 curso <- data.frame(nombre= c("Juan", "Pedro", "María", "José",
                               "Enzo", "Ariel", "Eva"),
                     edad= c(25, 32, 21,40,
