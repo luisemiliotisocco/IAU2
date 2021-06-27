@@ -1,4 +1,6 @@
-#prueba
+#prueba  
+
+
 
 curso <- data.frame(nombre= c("Juan", "Pedro", "María", "José",
                               "Enzo", "Ariel", "Eva"),
