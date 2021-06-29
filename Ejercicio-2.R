@@ -1,13 +1,14 @@
-library(tidyverse)
-library(ggplot2)
-library(sf)
-options(scipen = 999)
+library(tidyverse) # Easily Install and Load the 'Tidyverse', CRAN v1.3.0
+library(sf) # Simple Features for R, CRAN v1.0-0
+options(scipen = 999) # Eliminar notación cientifica
 
 barrios<- st_read("data/barrios/barrios_badata.shp")
 barrios <- select(barrios, BARRIO, COMUNA)
 
 terrenos2020 <- st_read("data/terrenos-2020/210517_Terrenos_Vta_Anual2020.shp")
+
 sum(is.na(terrenos2020))  #hay 6 instancias nulas, las elimino
+
 terrenos2020 <- drop_na(terrenos2020)
 
 terrenos2020 <- terrenos2020 %>% 
@@ -93,6 +94,7 @@ ggplot()+
        subtitle = "Período 2019-2020",
        caption="Fuente: GCBA")+
   theme_void()
+
 
 
 
