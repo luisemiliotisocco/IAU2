@@ -1,3 +1,14 @@
+install.packages("sf")
+install.packages("tidyverse")
+install.packages("skimr")
+install.packages("ggmap")
+install.packages("janitor")
+install.packages("googlesheets4")
+install.packages("leaflet")
+
+
+
+
 library(janitor)
 library(googlesheets4)
 library(tidyverse)
