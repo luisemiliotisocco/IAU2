@@ -34,11 +34,50 @@ url2 <- "https://www.cronista.com/MercadosOnline/dolar.html"
 
 
 dolar <- read_html(url2) %>% 
-  html_nodes(xpath = '//*[@id="market-scrll-2"]') %>% # Selector Gadget Copy Xpath
-  html_table(fill = T)
+  html_nodes(xpath = '//*[(@id = "market-scrll-2")]') %>%
+  html_attrs()   #ATTRS??? 
+
+  #%>%  # Selector Gadget Copy Xpath
+  #html_table(fill = T)
 
 
-#RESULTADO DEBERIA SER DF CON 4 VARIABLES
+
+moneda <- read_html(url2) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "name", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
+') %>%
+  html_text()
+
+variacion <- read_html(url2) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "percentage", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
+') %>%
+  html_text()
+
+compra <- read_html(url2) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "buy", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]') %>%
+  html_text()
+
+venta <- read_html(url2) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "sell", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]') %>%
+  html_text() %>% 
+  str_replace("\\(", "")
+
+tabla <- tibble(
+  moneda = moneda, 
+  variacion = variacion, 
+  compra = compra, 
+  venta= venta
+)
 
 
+
+
+moneda_tabla <- html_table(moneda)
+
+
+
+  
+  
+  #RESULTADO DEBERIA SER DF CON 4 VARIABLES
+  
+//*[contains(concat( " ", @class, " " ), concat( " ", "name", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
 
