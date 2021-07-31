@@ -74,7 +74,7 @@ ggplot()+
 
 
 #-----------------------------------------------------------
-## VARIACIÓN PORCENTUAL
+## VARIACI?N PORCENTUAL
 
 terrenos %>%  left_join(terrenos2019_barrio, terrenos2020_barrio, by="BARRIO")
 terrenos <- terrenos %>%  
@@ -87,7 +87,7 @@ ggplot()+
   scale_fill_viridis_d()+
   labs(x="USD", 
        y="Barrio",
-       title="Variación 2019-2020", 
+       title="Variaci?n 2019-2020", 
        caption="Fuente: GCBA")+
   theme_minimal()
 
@@ -99,8 +99,8 @@ ggplot()+
   scale_fill_continuous(limits=c(-100, 100), breaks=c(-100, -75, -50, -25, 0, 25, 50, 75, 100))+
   geom_sf_text(data=terrenos_barrios, aes(label=round(VARIACION),0), size=4, fontface = "bold")+
   scale_fill_viridis_c(alpha=.75)+
-  labs(title="Variación porcentual por Barrio", 
-       subtitle = "Período 2019-2020",
+  labs(title="Variaci?n porcentual por Barrio", 
+       subtitle = "Per?odo 2019-2020",
        caption="Fuente: GCBA")+
   theme_void()
 
@@ -109,12 +109,50 @@ ggplot()+
   geom_sf(data=terrenos_barrios %>% filter(VARIACION<0), fill="brown1")+
   scale_fill_continuous(limits=c(-100, 100), breaks=c(-100, -75, -50, -25, 0, 25, 50, 75, 100))+
   geom_sf_text(data=terrenos_barrios, aes(label=BARRIO), size=1.5)+
-  labs(title="¿Qué barrios crecieron?", 
-       subtitle = "Período 2019-2020",
+  labs(title="?Qu? barrios crecieron?", 
+       subtitle = "Per?odo 2019-2020",
        caption="Fuente: GCBA")+
   theme_void()
 
 
+
+#----------------------------------------
+#SCRAPPING
+
+
+library(rvest)
+library(stringr)
+
+url <- "https://www.cronista.com/MercadosOnline/dolar.html"
+
+
+moneda <- read_html(url) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "name", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
+') %>%
+  html_text()
+
+variacion <- read_html(url) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "percentage", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
+') %>%
+  html_text()
+
+compra <- read_html(url) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "buy", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]') %>%
+  html_text()
+
+venta <- read_html(url) %>% 
+  html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "sell", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]') %>%
+  html_text() %>% 
+  str_replace ("")
+
+tabla <- tibble(
+  moneda = moneda, 
+  variacion = variacion, 
+  compra = compra,
+  venta= venta
+)
+
+class(tabla$venta)
 
 
 
