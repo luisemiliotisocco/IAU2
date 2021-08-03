@@ -40,7 +40,8 @@ dolar <- read_html(url2) %>%
   #%>%  # Selector Gadget Copy Xpath
   #html_table(fill = T)
 
-
+tabla <- tibble(dolar)
+  
 
 moneda <- read_html(url2) %>% 
   html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "name", " " )) and contains(concat( " ", @class, " " ), concat( " ", "col", " " ))]
