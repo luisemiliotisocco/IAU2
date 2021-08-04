@@ -1,15 +1,24 @@
 library(tidyverse) # Easily Install and Load the 'Tidyverse', CRAN v1.3.0
 library(sf) # Simple Features for R, CRAN v1.0-0
+library(vroom)
+library(skimr)
 options(scipen = 999) # Eliminar notación cientifica
+
+
+#usar vroom 
+#usar skimr
+#crear funcion 
 
 
 barrios <- st_read("data/barrios/barrios_badata.shp") %>% 
   select(BARRIO, COMUNA)
 
+
 #-----------------------------------------------------------
-## TERRENOS 2019  
+## TERRENOS 2020 
 
 terrenos2020 <- st_read("data/terrenos-2020/210517_Terrenos_Vta_Anual2020.shp")
+skim (terrenos2020)
 
 sum(is.na(terrenos2020))  #hay 6 instancias nulas, las elimino
 
@@ -40,10 +49,13 @@ ggplot()+
        caption="Fuente: GCBA")+
   theme_minimal()
 
+
 #-----------------------------------------------------------
 ## TERRENOS 2019  
 
 terrenos2019 <- st_read("data/terrenos-2019/Terrenos_venta_2019.shp")
+skim (terrenos2019)
+
 head(terrenos2019)
 names(terrenos2019)
 sum(is.na(terrenos2019))  #no hay instancias nulas
@@ -73,8 +85,29 @@ ggplot()+
   theme_minimal()
 
 
+
 #-----------------------------------------------------------
-## VARIACI?N PORCENTUAL
+## CREO UNA FUNCIÓN PARA FILTRAR LA DATA DE 2018
+
+terrenos2018 <- st_read("data/terrenos-2019/Terrenos_venta_2019.shp")
+
+#OJO CAMBIAR DF + ARMAR PASOS PREVIOS, LA FUNCION YA FUNCIONA
+
+
+
+filtrado_terrenos <- function(df) {
+  df <- df %>% 
+    select(OPERACION) %>% 
+    filter(OPERACION=="VTA") %>% 
+    st_join(barrios)
+}
+  
+terrenos2018 <- filtrado_terrenos(terrenos2018)
+
+
+
+#-----------------------------------------------------------
+## VARIACIÓN PORCENTUAL
 
 terrenos %>%  left_join(terrenos2019_barrio, terrenos2020_barrio, by="BARRIO")
 terrenos <- terrenos %>%  
