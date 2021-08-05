@@ -154,7 +154,8 @@ ggplot(terrenos)+
   geom_bar(aes(y=reorder(BARRIO, -VARIACION_18_19), weight=VARIACION_18_19, fill="Variación 2018-2019"), color="black", linetype="dashed", alpha=.7)+
   labs(x="USD", 
        y="Barrio",
-       title="Variación 2019-2020", 
+       title="Variación porcentual de precios de los terrenos en venta",
+       subtitle="Períodos 2018-2019, 2019-2020",
        caption="Fuente: GCBA")+
   geom_vline (xintercept = 0, linetype="dashed", size=1)+
   scale_fill_manual(values = c("gray", "brown4"))+
