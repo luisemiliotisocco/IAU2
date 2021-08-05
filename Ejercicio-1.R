@@ -151,20 +151,52 @@ print(terrenos[order(terrenos$VARIACION_19_20, decreasing= T),])
 
 ggplot(terrenos)+
   geom_bar(aes(y=reorder(BARRIO, -VARIACION_19_20), weight=VARIACION_19_20, fill="Variación 2019-2020"), color="black", alpha=.8)+
-  geom_bar(aes(y=reorder(BARRIO, -VARIACION_18_19), weight=VARIACION_18_19, fill="Variación 2018-2019"), color="black", linetype="dashed", alpha=.7)+
+  geom_bar(aes(y=BARRIO, weight=VARIACION_18_19, fill="Variación 2018-2019"), color="black", linetype="dashed", alpha=.7)+
   labs(x="USD", 
        y="Barrio",
        title="Variación porcentual de precios de los terrenos en venta",
        subtitle="Períodos 2018-2019, 2019-2020",
-       caption="Fuente: GCBA")+
+       caption="Fuente: GCBA",
+       fill="Referencia")+
   geom_vline (xintercept = 0, linetype="dashed", size=1)+
   scale_fill_manual(values = c("gray", "brown4"))+
   theme_minimal()
 
 # Se observa que la mayoría de los barrios sufrio una importante caída en el período 2019-2020 
-# Lo llamativo es que si observamos el período anterior (2018-2019), la tendencia pareciera revertirse
-# Es decir que en general los barrios que habían experimentado un reciente aumento en el precio del suelo, sufieron una caída mayor y visceversa
+# Es llamativo es que si observamos el período anterior (2018-2019), la tendencia pareciera revertirse
+# Es decir que en general los barrios que habían experimentado una reciente variación positiva en el precio del suelo, sufieron una caída mayor y visceversa, a lo que a fines prácticos llamaremos "efecto rebote"
 
+
+## BARRIOS QUE REGISTRAN EFECTO REBOTE (cambio de signo de variación interanual)
+
+sum(terrenos$VARIACION_18_19 == 0 | terrenos$VARIACION_19_20==0) 
+#hay 0 instancias con variación 0.00, por lo que la confición igual no será incluída
+
+terrenos <- terrenos %>% 
+  mutate(rebote = case_when(
+    (VARIACION_18_19 < 0 & VARIACION_19_20 < 0) ~ "Nulo",
+    (VARIACION_18_19 > 0 & VARIACION_19_20 > 0) ~ "Nulo",
+    (VARIACION_18_19 < 0 & VARIACION_19_20 > 0) ~ "Positivo",
+    (VARIACION_18_19 > 0 & VARIACION_19_20 < 0) ~ "Negativo"))
+
+head(terrenos)
+
+#veamoslo nuevamente
+ggplot()+
+  geom_bar(data=terrenos, aes(y=reorder(BARRIO, -VARIACION_19_20), weight=VARIACION_19_20, fill="Variación 2019-2020"), color="black", alpha=.8)+
+  geom_bar(data=terrenos %>% filter (rebote=="Positivo"), 
+           aes(y=BARRIO, weight=VARIACION_18_19, fill="Variación 2018-2019 \nRebote positivo"), color="black", linetype="dashed", alpha=.7)+
+  geom_bar(data=terrenos %>% filter (rebote=="Negativo"), 
+           aes(y=BARRIO, weight=VARIACION_18_19, fill="Variación 2018-2019 \nRebote negativo"), color="black", linetype="dashed", alpha=.7)+
+  labs(x="USD", 
+       y="Barrio",
+       title="Variación porcentual de precios de los terrenos en venta",
+       subtitle="Período 2019-2020 + Efecto rebote en variación interanual",
+       caption="Se omiten los casos que continuaron con la misma tendencia \nFuente: GCBA",
+       fill="Referencia")+
+  geom_vline (xintercept = 0, linetype="dashed", size=1)+
+  scale_fill_manual(values = c("indianred", "darkseagreen", "brown4"))+
+  theme_minimal()
 
 
 
