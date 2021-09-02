@@ -9,7 +9,7 @@ hola<- "hola"
 #' prueba 3
 
 # rbase <- read.csv()
-# tidy <- read_csv()
+# tidy <- read_csv  lalala
 
 install.packages("vroom") #para levantar archivos pesados
 library (vroom)
